@@ -26,6 +26,7 @@
 
 #include "pprz_trig_int.h"
 #include "pprz_algebra_int.h"
+#include "stdint.h"
 #if !defined(PPRZ_TRIG_INT_USE_FLOAT)
 #if !defined(PPRZ_TRIG_INT_COMPR_FLASH) || defined(PPRZ_TRIG_INT_TEST)
 PPRZ_TRIG_CONST int16_t pprz_trig_int[6434] = {    0,
@@ -890,6 +891,18 @@ int32_t pprz_itrig_cos(int32_t angle)
   return pprz_itrig_sin(angle + INT32_ANGLE_PI_2);
 }
 
+int32_t pprz_itrig_tan(int32_t angle)
+{
+  static int32_t min_val = ANGLE_BFP_OF_REAL(1e-7);
+
+  int32_t cos_angle = pprz_itrig_cos(angle);
+  if (cos_angle > min_val)
+  {
+    return pprz_itrig_sin(angle) / cos_angle;
+  } else {
+    return INT32_MAX;
+  }
+}
 
 /* http://jet.ro/files/The_neglected_art_of_Fixed_Point_arithmetic_20060913.pdf */
 /* http://www.dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization */

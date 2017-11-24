@@ -217,7 +217,7 @@ void guidance_h_mode_changed(uint8_t new_mode)
   }
 
 #if HYBRID_NAVIGATION
-  guidance_hybrid_norm_ref_airspeed = 0;
+  guidance_hybrid_reset_filters();
 #endif
 
   switch (new_mode) {
@@ -474,10 +474,10 @@ static void guidance_h_traj_run(bool in_flight)
   /* run PID */
   int32_t pd_x =
     ((guidance_h.gains.p * guidance_h_pos_err.x) >> (INT32_POS_FRAC - GH_GAIN_SCALE)) +
-    ((guidance_h.gains.d * (guidance_h_speed_err.x >> 2)) >> (INT32_SPEED_FRAC - GH_GAIN_SCALE - 2));
+    ((guidance_h.gains.d * (guidance_h_speed_err.x >> GH_GAIN_SCALE)) >> INT32_SPEED_FRAC); /* avoid overflow here with two stage divide */
   int32_t pd_y =
     ((guidance_h.gains.p * guidance_h_pos_err.y) >> (INT32_POS_FRAC - GH_GAIN_SCALE)) +
-    ((guidance_h.gains.d * (guidance_h_speed_err.y >> 2)) >> (INT32_SPEED_FRAC - GH_GAIN_SCALE - 2));
+    ((guidance_h.gains.d * (guidance_h_speed_err.y >> GH_GAIN_SCALE) >> INT32_SPEED_FRAC));
   guidance_h_cmd_earth.x = pd_x +
                            ((guidance_h.gains.v * guidance_h.ref.speed.x) >> (INT32_SPEED_FRAC - GH_GAIN_SCALE)) + /* speed feedforward gain */
                            ((guidance_h.gains.a * guidance_h.ref.accel.x) >> (INT32_ACCEL_FRAC -
@@ -617,7 +617,7 @@ static inline void transition_run(bool to_forward)
 {
   if (to_forward) {
     //Add 0.00625%
-    transition_percentage += 1 << (INT32_PERCENTAGE_FRAC - 4);
+    transition_percentage += 1 << (INT32_PERCENTAGE_FRAC - 4);  // TODO where do these bitshifts come from
   } else {
     //Subtract 0.00625%
     transition_percentage -= 1 << (INT32_PERCENTAGE_FRAC - 4);

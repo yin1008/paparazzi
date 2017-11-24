@@ -149,6 +149,27 @@ struct Int32Eulers {
   int32_t psi;   ///< in rad with #INT32_ANGLE_FRAC
 };
 
+/* high res frac for integration of angles */
+#define INT32_ANGLE_HIGH_RES_FRAC 18
+#define INT32_ANGLE_HIGH_RES_PI_4   (int32_t)HIGH_RES_ANGLE_BFP_OF_REAL(   0.7853981633974483096156608458198757)
+#define INT32_ANGLE_HIGH_RES_PI_2   (int32_t)HIGH_RES_ANGLE_BFP_OF_REAL(   1.5707963267948966192313216916397514)
+#define INT32_ANGLE_HIGH_RES_PI     (int32_t)HIGH_RES_ANGLE_BFP_OF_REAL(   3.1415926535897932384626433832795029)
+#define INT32_ANGLE_HIGH_RES_2_PI   (int32_t)HIGH_RES_ANGLE_BFP_OF_REAL(2.*3.1415926535897932384626433832795029)
+
+#define INT32_ANGLE_HIGH_RES_NORMALIZE(_a) {             \
+    while ((_a) > INT32_ANGLE_HIGH_RES_PI)  (_a) -= INT32_ANGLE_HIGH_RES_2_PI;    \
+    while ((_a) < -INT32_ANGLE_HIGH_RES_PI) (_a) += INT32_ANGLE_HIGH_RES_2_PI;    \
+  }
+
+/**
+ * @brief high resolution euler angles
+ * @details Units: rad in BFP with #INT32_ANGLE_HIGH_RES_FRAC */
+struct Int32HighResEulers {
+  int32_t phi;   ///< in rad with #INT32_ANGLE_HIGH_RES_FRAC
+  int32_t theta; ///< in rad with #INT32_ANGLE_HIGH_RES_FRAC
+  int32_t psi;   ///< in rad with #INT32_ANGLE_HIGH_RES_FRAC
+};
+
 
 /* Rotation matrix. */
 #define INT32_TRIG_FRAC 14
@@ -209,6 +230,8 @@ struct Int64Vect3 {
 #define RATE_FLOAT_OF_BFP(_ai)  FLOAT_OF_BFP((_ai), INT32_RATE_FRAC)
 #define ANGLE_BFP_OF_REAL(_af)  BFP_OF_REAL((_af), INT32_ANGLE_FRAC)
 #define ANGLE_FLOAT_OF_BFP(_ai) FLOAT_OF_BFP((_ai), INT32_ANGLE_FRAC)
+#define HIGH_RES_ANGLE_BFP_OF_REAL(_af)  BFP_OF_REAL((_af), INT32_ANGLE_HIGH_RES_FRAC)
+#define HIGH_RES_ANGLE_FLOAT_OF_BFP(_ai) FLOAT_OF_BFP((_ai), INT32_ANGLE_HIGH_RES_FRAC)
 #define QUAT1_BFP_OF_REAL(_qf)  BFP_OF_REAL((_qf), INT32_QUAT_FRAC)
 #define QUAT1_FLOAT_OF_BFP(_qi) FLOAT_OF_BFP((_qi), INT32_QUAT_FRAC)
 #define TRIG_BFP_OF_REAL(_tf)   BFP_OF_REAL((_tf), INT32_TRIG_FRAC)

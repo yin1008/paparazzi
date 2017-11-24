@@ -43,13 +43,13 @@ enum AhrsICEStatus {
 struct AhrsIntCmplEuler {
   struct Int32Rates  gyro_bias;
   struct Int32Rates  imu_rate;
-  struct Int32Eulers hi_res_euler;
-  struct Int32Eulers measure;
-  struct Int32Eulers residual;
-  struct Int32Eulers measurement;
+  struct Int32HighResEulers euler_est;
+  struct Int32HighResEulers residual;
+  struct Int32HighResEulers meas_lp;
+  struct Int32HighResEulers meas;
   struct Int32Eulers ltp_to_imu_euler;
   int32_t reinj_1;
-  float mag_offset;
+  int32_t mag_offset;
 
   struct OrientationReps body_to_imu;
 

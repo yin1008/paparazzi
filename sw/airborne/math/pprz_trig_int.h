@@ -75,6 +75,7 @@ extern PPRZ_TRIG_CONST int16_t pprz_trig_int[];
 
 extern int32_t pprz_itrig_sin(int32_t angle);
 extern int32_t pprz_itrig_cos(int32_t angle);
+extern int32_t pprz_itrig_tan(int32_t angle);
 extern int32_t int32_atan2(int32_t y, int32_t x);
 extern int32_t int32_atan2_2(int32_t y, int32_t x);
 

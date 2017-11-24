@@ -37,6 +37,7 @@
 
 #include "math/pprz_algebra_int.h"
 
+#define GV_GAIN_SCALE 2
 
 /* error if some gains are negative */
 #if (GUIDANCE_V_HOVER_KP < 0) ||                   \
@@ -455,9 +456,9 @@ void run_hover_loop(bool in_flight)
 
   /* our error feed back command                   */
   /* z-axis pointing down -> positive error means we need less thrust */
-  guidance_v_fb_cmd = ((-guidance_v_kp * err_z)  >> 7) +
-                      ((-guidance_v_kd * err_zd) >> 16) +
-                      ((-guidance_v_ki * guidance_v_z_sum_err) >> 16);
+  guidance_v_fb_cmd = ((-guidance_v_kp * err_z)  >> (INT32_POS_FRAC - GV_GAIN_SCALE)) +
+                      ((-guidance_v_kd * err_zd) >> (INT32_SPEED_FRAC - GV_GAIN_SCALE)) +  // TODO multiply all gains in the airframes by 2
+                      ((-guidance_v_ki * guidance_v_z_sum_err) >> (INT32_POS_FRAC - GV_GAIN_SCALE + 9)); // Designed for PERIODIC FREQUENCY of 512 (2^9) // TODO divide all gains by 2
 
   guidance_v_delta_t = guidance_v_ff_cmd + guidance_v_fb_cmd;
 

@@ -156,7 +156,7 @@ void ahrs_icq_init(void)
 
 
 bool ahrs_icq_align(struct Int32Rates *lp_gyro, struct Int32Vect3 *lp_accel,
-                      struct Int32Vect3 *lp_mag)
+    __attribute__((unused)) struct Int32Vect3 *lp_mag)
 {
 
 #if USE_MAGNETOMETER
@@ -168,8 +168,6 @@ bool ahrs_icq_align(struct Int32Rates *lp_gyro, struct Int32Vect3 *lp_accel,
   /* Compute an initial orientation from accel and just set heading to zero */
   ahrs_int_get_quat_from_accel(&ahrs_icq.ltp_to_imu_quat, lp_accel);
   ahrs_icq.heading_aligned = false;
-  // supress unused arg warning
-  lp_mag = lp_mag;
 #endif
 
   /* Use low passed gyro value as initial bias */

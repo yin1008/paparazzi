@@ -32,13 +32,19 @@
 
 #include "math/pprz_algebra_int.h"
 
-extern int32_t guidance_hybrid_norm_ref_airspeed;
 extern float alt_pitch_gain;
-extern int32_t max_airspeed;
+extern float max_airspeed;
+extern float nominal_airspeed;
+extern float transition_airspeed;
 extern int32_t wind_gain;
 extern int32_t horizontal_speed_gain;
 extern float max_turn_bank;
 extern float turn_bank_gain;
+
+extern void guidance_hybrid_max_airspeed_cb(float new_val);
+extern void guidance_hybrid_nominal_airspeed_cb(float new_val);
+extern void guidance_hybrid_transition_airspeed_cb(float new_val);
+extern void guidance_hybrid_max_turn_bank_cb(float new_val);
 
 /** Runs the Hybrid Guidance main functions.
  */
@@ -71,6 +77,8 @@ extern void guidance_hybrid_determine_wind_estimate(void);
  * @param sp_cmd Add Description
  */
 extern void guidance_hybrid_reset_heading(struct Int32Eulers *sp_cmd);
+
+extern void guidance_hybrid_reset_filters(void);
 
 /** Description.
  */
