@@ -76,7 +76,7 @@ PPRZCENTER=sw/supervision
 MISC=sw/ground_segment/misc
 LOGALIZER=sw/logalizer
 
-SUBDIRS = $(PPRZCENTER) $(MISC) $(LOGALIZER) sw/tools
+SUBDIRS = $(PPRZCENTER) $(MISC) $(LOGALIZER) $(TOOLS)
 
 #
 # Communication protocol version
